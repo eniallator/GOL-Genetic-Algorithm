@@ -11,6 +11,17 @@ class Creature(object):
         self.mutation_chance = mutation_chance
         self.score = 0
 
+    def gen_coords_from_dna(self):
+        dna_size = len(self.dna)
+        alive_cells = []
+
+        for index in range(len(self.dna)):
+            if self.dna[index]:
+                alive_cells.append([int(index / self.width),
+                                    int(index % self.height)])
+
+        return alive_cells
+
     def mate(self, other):
         if self.width != other.width or self.height != other.height:
             print 'tried mating the following creature sizes\'s:'

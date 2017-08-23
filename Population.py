@@ -27,17 +27,6 @@ class Population(object):
     def add_creature(self, creature):
         self._population.append(creature)
 
-    def gen_points(self, creature):
-        dna_size = len(creature.dna)
-        alive_cells = []
-
-        for index in range(len(creature.dna)):
-            if creature.dna[index]:
-                alive_cells.append([int(index / creature.width),
-                                    int(index % creature.height)])
-
-        return alive_cells
-
     def _weighted_random(self, population):
         totals = []
         total_score = 0
@@ -55,8 +44,8 @@ class Population(object):
     def evolve(self):
         new_population = Population(0, self._width, self._height, [])
 
-        for i in range(len(self._population)):
-            creature_choice = list(self._population)
+        for i in range(len(self)):
+            creature_choice = list(self)
 
             first_index = self._weighted_random(creature_choice)
             first_creature = creature_choice.pop(first_index)
