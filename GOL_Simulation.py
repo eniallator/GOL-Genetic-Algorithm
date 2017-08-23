@@ -54,7 +54,7 @@ class GOL_Simulation(object):
         for creature in self.population:
             alive_cells = self.population.gen_points(creature)
 
-            for i in range(self.iterations + 1):
+            for i in range(self.iterations):
                 alive_cells = self._apply_rules(alive_cells)
 
             creature.score = len(alive_cells)
