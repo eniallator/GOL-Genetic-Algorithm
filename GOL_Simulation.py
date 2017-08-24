@@ -52,7 +52,7 @@ class GOL_Simulation(object):
 
     def evaluate(self):
         for creature in self.population:
-            alive_cells = self.population.gen_points(creature)
+            alive_cells = creature.gen_coords_from_dna()
 
             for i in range(self.iterations):
                 alive_cells = self._apply_rules(alive_cells)
@@ -60,19 +60,18 @@ class GOL_Simulation(object):
             creature.score = len(alive_cells)
 
     def stats(self):
-        highest = None
-        lowest = None
-        total = 0
+        scores = [creature.score for creature in self.population]
 
-        for creature in self.population:
-            total += creature.score
-            highest = creature if not highest or highest < creature.score else highest
-            lowest = creature.score if not lowest or lowest > creature.score else lowest
+        highest = max(scores)
+        lowest = min(scores)
+        total = sum(scores)
 
-        print 'Total score: ' + str(total) + ' Highest score: ' + str(highest.score) + ' Lowest score: ' + str(lowest) + ' Best DNA:'
+        best_dna = self.population[scores.index(highest)]
 
-        for i in range(highest.height):
-            print highest.dna[i * highest.height : (i + 1) * highest.height]
+        print 'Total score: ' + str(total) + ' Highest score: ' + str(highest) + ' Lowest score: ' + str(lowest) + ' Best DNA:'
+
+        for i in range(best_dna.height):
+            print best_dna.dna[i * best_dna.height : (i + 1) * best_dna.height]
 
     def evolve_population(self):
         new_population = self.population.evolve()
