@@ -4,10 +4,9 @@ from Creature import Creature
 
 class GOL_Simulation(object):
 
-    def __init__(self, size, width=6, height=6, iterations=30, mutation_chance=0.025, score_exponent=1):
-        self._population = Population(size, width, height, mutation_chance)
+    def __init__(self, size, width=6, height=6, iterations=30, mutation_chance=0.025, creatures_to_remain=5):
+        self._population = Population(size, width, height, mutation_chance, creatures_to_remain)
         self._iterations = iterations
-        self._score_exponent = score_exponent
 
     def _find_dead_neighbours(self, cycle, curr_index):
         dead_neighbours = []
@@ -58,10 +57,10 @@ class GOL_Simulation(object):
             for i in range(self._iterations):
                 alive_cells = self._apply_rules(alive_cells)
 
-            creature.score = len(alive_cells) ** self._score_exponent
+            creature.score = len(alive_cells)
 
     def stats(self):
-        scores = [int(creature.score ** (1 / self._score_exponent)) for creature in self._population]
+        scores = [creature.score for creature in self._population]
 
         highest = max(scores)
         lowest = min(scores)
@@ -69,7 +68,7 @@ class GOL_Simulation(object):
 
         best_dna = self._population[scores.index(highest)]
 
-        print 'Total score: ' + str(total) + ' Highest score: ' + str(highest) + ' Lowest score: ' + str(lowest) + ' Best DNA:'
+        print 'Population size: ' + str(len(scores)) + ' Total score: ' + str(total) + ' Highest score: ' + str(highest) + ' Lowest score: ' + str(lowest) + ' Best DNA:'
 
         for i in range(best_dna.height):
             print best_dna.dna[i * best_dna.height : (i + 1) * best_dna.height]

@@ -4,11 +4,12 @@ from Creature import Creature
 
 class Population(object):
 
-    def __init__(self, size, width, height, mutation_chance):
+    def __init__(self, size, width, height, mutation_chance, creatures_to_remain):
         self._population = []
         self._width = width
         self._height = height
         self._mutation_chance = mutation_chance
+        self._creatures_to_remain = creatures_to_remain
 
         for i in range(size):
             self.add_creature(Creature(width, height, mutation_chance))
@@ -42,11 +43,19 @@ class Population(object):
             if rnd <= total:
                 return i
 
-    def evolve(self):
-        new_population = Population(0, self._width, self._height, self._mutation_chance)
+    def _add_creatures_to_remain(self, new_population):
+        scores_list = [creature.score for creature in self]
+        remain_creatures = sorted(self, key=lambda creature: creature.score, reverse=True)[:self._creatures_to_remain]
 
-        for i in range(len(self)):
-            creature_choice = list(self)
+        for creature_to_add in remain_creatures:
+            new_population.add_creature(creature_to_add)
+
+    def evolve(self):
+        new_population = Population(0, self._width, self._height, self._mutation_chance, self._creatures_to_remain)
+        self._add_creatures_to_remain(new_population)
+
+        for i in range(len(self) - self._creatures_to_remain):
+            creature_choice = list(new_population)
 
             first_index = self._weighted_random(creature_choice)
             first_creature = creature_choice.pop(first_index)
