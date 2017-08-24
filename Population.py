@@ -4,13 +4,14 @@ from Creature import Creature
 
 class Population(object):
 
-    def __init__(self, size, width, height, population=[]):
-        self._population = population
+    def __init__(self, size, width, height, mutation_chance):
+        self._population = []
         self._width = width
         self._height = height
+        self._mutation_chance = mutation_chance
 
         for i in range(size):
-            self.add_creature(Creature(width, height))
+            self.add_creature(Creature(width, height, mutation_chance))
 
     def __iter__(self):
         return iter(self._population)
@@ -42,7 +43,7 @@ class Population(object):
                 return i
 
     def evolve(self):
-        new_population = Population(0, self._width, self._height, [])
+        new_population = Population(0, self._width, self._height, self._mutation_chance)
 
         for i in range(len(self)):
             creature_choice = list(self)

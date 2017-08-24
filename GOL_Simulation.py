@@ -4,8 +4,8 @@ from Creature import Creature
 
 class GOL_Simulation(object):
 
-    def __init__(self, size, width=6, height=6, iterations=30):
-        self.population = Population(size, width, height)
+    def __init__(self, size, width=6, height=6, iterations=30, mutation_chance=0.025):
+        self.population = Population(size, width, height, mutation_chance)
         self.iterations = iterations
 
     def _find_dead_neighbours(self, cycle, curr_index):

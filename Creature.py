@@ -4,7 +4,7 @@ from DNA import DNA
 
 class Creature(object):
 
-    def __init__(self, width, height, mutation_chance=0.025):
+    def __init__(self, width, height, mutation_chance):
         self.dna = DNA(width * height)
         self.width = width
         self.height = height
