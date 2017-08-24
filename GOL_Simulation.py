@@ -4,9 +4,10 @@ from Creature import Creature
 
 class GOL_Simulation(object):
 
-    def __init__(self, size, width=6, height=6, iterations=30, mutation_chance=0.025):
-        self.population = Population(size, width, height, mutation_chance)
-        self.iterations = iterations
+    def __init__(self, size, width=6, height=6, iterations=30, mutation_chance=0.025, score_exponent=1):
+        self._population = Population(size, width, height, mutation_chance)
+        self._iterations = iterations
+        self._score_exponent = score_exponent
 
     def _find_dead_neighbours(self, cycle, curr_index):
         dead_neighbours = []
@@ -51,22 +52,22 @@ class GOL_Simulation(object):
         return self._spawn_new_cells(next_cycle, total_dead_neighbours)
 
     def evaluate(self):
-        for creature in self.population:
+        for creature in self._population:
             alive_cells = creature.gen_coords_from_dna()
 
-            for i in range(self.iterations):
+            for i in range(self._iterations):
                 alive_cells = self._apply_rules(alive_cells)
 
-            creature.score = len(alive_cells)
+            creature.score = len(alive_cells) ** self._score_exponent
 
     def stats(self):
-        scores = [creature.score for creature in self.population]
+        scores = [int(creature.score ** (1 / self._score_exponent)) for creature in self._population]
 
         highest = max(scores)
         lowest = min(scores)
         total = sum(scores)
 
-        best_dna = self.population[scores.index(highest)]
+        best_dna = self._population[scores.index(highest)]
 
         print 'Total score: ' + str(total) + ' Highest score: ' + str(highest) + ' Lowest score: ' + str(lowest) + ' Best DNA:'
 
@@ -74,6 +75,6 @@ class GOL_Simulation(object):
             print best_dna.dna[i * best_dna.height : (i + 1) * best_dna.height]
 
     def evolve_population(self):
-        new_population = self.population.evolve()
-        del self.population
-        self.population = new_population
+        new_population = self._population.evolve()
+        del self._population
+        self._population = new_population
