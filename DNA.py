@@ -3,15 +3,16 @@ import random
 
 class DNA(object):
 
-    def __init__(self, size=None, dna=None):
-        if dna:
-            self._dna = dna
-            self.size = len(dna)
-        else:
+    def __init__(self, size=None):
+        if type(size) == int:
             self._dna = []
             self.size = size
             for index in range(size):
                 self._dna.append(random.randrange(0, 2))
+        else:
+            dna = size
+            self._dna = dna
+            self.size = len(dna)
 
     def __iter__(self):
         return iter(self._dna)
