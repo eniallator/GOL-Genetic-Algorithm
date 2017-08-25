@@ -21,8 +21,8 @@ class Creature(object):
 
         for index in range(len(self.dna)):
             if self.dna[index]:
-                alive_cells.append([int(index / self.width),
-                                    int(index % self.height)])
+                alive_cells.append([index % self.width,
+                                    int(index / self.height)])
 
         return alive_cells
 

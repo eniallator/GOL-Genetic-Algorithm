@@ -41,7 +41,7 @@ class GOL_Simulation(object):
         next_cycle = list(prev_cycle)
         total_dead_neighbours = []
 
-        for index in range(len(prev_cycle) - 1, 0, -1):
+        for index in range(len(prev_cycle) - 1, -1, -1):
             dead_neighbours = self._find_dead_neighbours(prev_cycle, index)
             self._stack_neighbours(total_dead_neighbours, dead_neighbours)
 
