@@ -29,19 +29,28 @@ class Population(object):
     def add_creature(self, creature):
         self._population.append(creature)
 
-    def _weighted_random(self, population):
-        totals = []
-        total_score = 0
+    def _make_choice(self, scores, total, index, choice):
+        accumulator = scores[index]
 
-        for creature in population:
-            total_score += creature.score
-            totals.append(total_score)
+        while accumulator < choice:
+            index = (index + 1) % len(scores)
+            accumulator += scores[index]
 
-        rnd = random() * total_score
+        return index
 
-        for i, total in enumerate(totals):
-            if rnd <= total:
-                return i
+    def _choose_mates(self, population):
+        scores = [creature.score for creature in population]
+        total = sum(scores)
+        chosen_creatures = []
+
+        first_index = self._make_choice(scores, total, 0, random() * total)
+        chosen_creatures.append(population[first_index])
+        total -= scores[first_index]
+
+        second_index = self._make_choice(scores, total, first_index, random() * total)
+        chosen_creatures.append(population[second_index])
+
+        return chosen_creatures
 
     def _add_creatures_to_remain(self, new_population):
         scores_list = [creature.score for creature in self]
@@ -55,16 +64,8 @@ class Population(object):
         self._add_creatures_to_remain(new_population)
 
         for i in range(len(self) - self._creatures_to_remain):
-            creature_choice = list(new_population)
-
-            first_index = self._weighted_random(creature_choice)
-            first_creature = creature_choice.pop(first_index)
-
-            second_index = self._weighted_random(creature_choice)
-            second_creature = creature_choice.pop(second_index)
-
-            child = first_creature.mate(second_creature)
-
+            mates = self._choose_mates(new_population)
+            child = mates[0].mate(mates[1])
             new_population.add_creature(child)
 
         return new_population
