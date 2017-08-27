@@ -1,4 +1,3 @@
-from random import random, randrange
 from DNA import DNA
 
 
@@ -26,11 +25,6 @@ class Creature(object):
 
         return alive_cells
 
-    def _mutate_dna(self, dna):
-        for i in range(len(dna)):
-            if random() <= self._mutation_chance:
-                dna[i] = 0 if dna[i] else 1
-
     def mate(self, other):
         if self.width != other.width or self.height != other.height:
             print 'tried mating the following creature sizes\'s:'
@@ -38,11 +32,10 @@ class Creature(object):
             print str(other.width) + ' by ' + str(other.height)
             return
 
-        splice_point = randrange(len(self.dna) - 1)
-        new_dna = DNA(self.dna[0:splice_point] + other.dna[splice_point:len(other.dna)])
-
-        self._mutate_dna(new_dna)
+        new_dna = self.dna.splice(other.dna)
+        new_dna.mutate(self._mutation_chance)
 
         child = Creature(self.width, self.height, self._mutation_chance)
         child.set_dna(new_dna)
+
         return child
