@@ -3,11 +3,10 @@ from DNA import DNA
 
 class Creature(object):
 
-    def __init__(self, width, height, mutation_chance):
+    def __init__(self, width, height):
         self.dna = DNA(width * height)
         self.width = width
         self.height = height
-        self._mutation_chance = mutation_chance
         self.score = 0
 
     def set_dna(self, new_dna):
@@ -25,7 +24,7 @@ class Creature(object):
 
         return alive_cells
 
-    def mate(self, other):
+    def mate(self, other, mutation_chance):
         if self.width != other.width or self.height != other.height:
             print 'tried mating the following creature sizes\'s:'
             print str(self.width) + ' by ' + str(self.height)
@@ -33,9 +32,9 @@ class Creature(object):
             return
 
         new_dna = self.dna.splice(other.dna)
-        new_dna.mutate(self._mutation_chance)
+        new_dna.mutate(mutation_chance)
 
-        child = Creature(self.width, self.height, self._mutation_chance)
+        child = Creature(self.width, self.height)
         child.set_dna(new_dna)
 
         return child

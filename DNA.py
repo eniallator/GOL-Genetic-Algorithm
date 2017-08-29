@@ -8,7 +8,7 @@ class DNA(object):
             self._dna = []
             self.size = size
             for index in range(size):
-                self._dna.append(randrange(0, 2))
+                self._dna.append(randrange(2))
         else:
             dna = size
             self._dna = dna

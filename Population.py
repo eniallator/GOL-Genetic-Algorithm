@@ -12,7 +12,7 @@ class Population(object):
         self._creatures_to_remain = creatures_to_remain
 
         for i in range(size):
-            self.add_creature(Creature(width, height, mutation_chance))
+            self.add_creature(Creature(width, height))
 
     def __iter__(self):
         return iter(self._population)
@@ -30,13 +30,14 @@ class Population(object):
         self._population.append(creature)
 
     def _make_choice(self, scores, total, index, choice):
-        accumulator = scores[index]
+        mod_scores = lambda index: index % len(scores)
+        accumulator = scores[mod_scores(index)]
 
         while accumulator < choice:
-            index = (index + 1) % len(scores)
+            index = mod_scores(index + 1)
             accumulator += scores[index]
 
-        return index
+        return mod_scores(index)
 
     def _choose_mates(self, population):
         scores = [creature.score for creature in population]
@@ -47,7 +48,7 @@ class Population(object):
         chosen_creatures.append(population[first_index])
         total -= scores[first_index]
 
-        second_index = self._make_choice(scores, total, first_index, random() * total)
+        second_index = self._make_choice(scores, total, first_index + 1, random() * total)
         chosen_creatures.append(population[second_index])
 
         return chosen_creatures
@@ -65,7 +66,7 @@ class Population(object):
 
         for i in range(len(self) - self._creatures_to_remain):
             mates = self._choose_mates(new_population)
-            child = mates[0].mate(mates[1])
+            child = mates[0].mate(mates[1], self._mutation_chance)
             new_population.add_creature(child)
 
         return new_population
