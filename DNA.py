@@ -40,7 +40,7 @@ class DNA(object):
     def mutate(self, mutation_chance):
         for i in range(len(self)):
             if random() < mutation_chance:
-                self[i] = 0 if self[i] else 1
+                self[i] = + (not self[i])
 
     def get_dna(self):
         return self._dna
