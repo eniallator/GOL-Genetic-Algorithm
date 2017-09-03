@@ -10,14 +10,14 @@ class GOL_Simulation(object):
 
     def _find_dead_neighbours(self, cycle, curr_index):
         dead_neighbours = []
-        for x in range(-1, 2):
-            for y in range(-1, 2):
-                if x or y:
-                    next_cell = [cycle[curr_index][0] + x,
-                                 cycle[curr_index][1] + y]
+        for xadd in range(-1, 2):
+            for yadd in range(-1, 2):
+                if xadd or yadd:
+                    next_cell = [cycle[curr_index][0] + xadd,
+                                 cycle[curr_index][1] + yadd]
                     try:
                         cycle.index(next_cell)
-                    except:
+                    except ValueError:
                         dead_neighbours.append(next_cell)
         return dead_neighbours
 
@@ -54,7 +54,7 @@ class GOL_Simulation(object):
         for creature in self._population:
             alive_cells = creature.gen_coords_from_dna()
 
-            for i in range(self._iterations):
+            for _ in range(self._iterations):
                 alive_cells = self._apply_rules(alive_cells)
 
             creature.score = len(alive_cells)

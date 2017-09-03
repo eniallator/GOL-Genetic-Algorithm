@@ -4,10 +4,10 @@ from random import random, randrange
 class DNA(object):
 
     def __init__(self, size=None):
-        if type(size) == int:
+        if isinstance(size, int):
             self._dna = []
             self.size = size
-            for index in range(size):
+            for _ in range(size):
                 self._dna.append(randrange(2))
         else:
             dna = size
@@ -38,7 +38,7 @@ class DNA(object):
         return new_dna
 
     def mutate(self, mutation_chance):
-        for i in range(len(self)):
+        for i, _ in enumerate(self):
             if random() < mutation_chance:
                 self[i] = + (not self[i])
 

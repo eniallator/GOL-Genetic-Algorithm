@@ -11,7 +11,7 @@ class Population(object):
         self._mutation_chance = mutation_chance
         self._creatures_to_remain = creatures_to_remain
 
-        for i in range(size):
+        for _ in range(size):
             self.add_creature(Creature(width, height))
 
     def __iter__(self):
@@ -29,7 +29,7 @@ class Population(object):
     def add_creature(self, creature):
         self._population.append(creature)
 
-    def _make_choice(self, scores, total, index, choice):
+    def _make_choice(self, scores, index, choice):
         mod_scores = lambda index: index % len(scores)
         accumulator = scores[mod_scores(index)]
 
@@ -44,17 +44,16 @@ class Population(object):
         total = sum(scores)
         chosen_creatures = []
 
-        first_index = self._make_choice(scores, total, 0, random() * total)
+        first_index = self._make_choice(scores, 0, random() * total)
         chosen_creatures.append(population[first_index])
         total -= scores[first_index]
 
-        second_index = self._make_choice(scores, total, first_index + 1, random() * total)
+        second_index = self._make_choice(scores, first_index + 1, random() * total)
         chosen_creatures.append(population[second_index])
 
         return chosen_creatures
 
     def _add_creatures_to_remain(self, new_population):
-        scores_list = [creature.score for creature in self]
         remain_creatures = sorted(self, key=lambda creature: creature.score, reverse=True)[:self._creatures_to_remain]
 
         for creature_to_add in remain_creatures:
@@ -64,7 +63,7 @@ class Population(object):
         new_population = Population(0, self._width, self._height, self._mutation_chance, self._creatures_to_remain)
         self._add_creatures_to_remain(new_population)
 
-        for i in range(len(self) - self._creatures_to_remain):
+        for _ in range(len(self) - self._creatures_to_remain):
             mates = self._choose_mates(new_population)
             child = mates[0].mate(mates[1], self._mutation_chance)
             new_population.add_creature(child)

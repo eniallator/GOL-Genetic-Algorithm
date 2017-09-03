@@ -14,7 +14,6 @@ class Creature(object):
         self.dna = new_dna
 
     def gen_coords_from_dna(self):
-        dna_size = len(self.dna)
         alive_cells = []
 
         for index in range(len(self.dna)):
