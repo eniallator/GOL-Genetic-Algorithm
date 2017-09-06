@@ -4,7 +4,7 @@ from Creature import Creature
 
 class GOL_Simulation(object):
 
-    def __init__(self, size, width=6, height=6, iterations=30, mutation_chance=0.025, creatures_to_remain=5):
+    def __init__(self, size=50, width=5, height=5, iterations=30, mutation_chance=0.025, creatures_to_remain=5):
         self._population = Population(size, width, height, mutation_chance, creatures_to_remain)
         self._iterations = iterations
 
@@ -61,6 +61,7 @@ class GOL_Simulation(object):
 
     def stats(self):
         scores = [creature.score for creature in self._population]
+        stats_msg = ''
 
         highest = max(scores)
         lowest = min(scores)
@@ -68,10 +69,12 @@ class GOL_Simulation(object):
 
         best_dna = self._population[scores.index(highest)]
 
-        print 'Population size: ' + str(len(scores)) + ' Total score: ' + str(total) + ' Highest score: ' + str(highest) + ' Lowest score: ' + str(lowest) + ' Best DNA:'
+        stats_msg += 'Population size: ' + str(len(scores)) + ' Total score: ' + str(total) + ' Highest score: ' + str(highest) + ' Lowest score: ' + str(lowest) + ' Best DNA:\n'
 
         for i in range(best_dna.height):
-            print best_dna.dna[i * best_dna.height : (i + 1) * best_dna.height]
+            stats_msg += str(best_dna.dna[i * best_dna.height : (i + 1) * best_dna.height]) + '\n'
+        
+        return stats_msg
 
     def evolve_population(self):
         new_population = self._population.evolve()
